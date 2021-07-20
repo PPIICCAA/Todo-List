@@ -1,18 +1,67 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <h1>My List</h1>
+    <div>
+      <input type="text" v-model="todoName" @keyup.enter="addTodo">
+      <button @click="addTodo()">Print</button>
+    </div>
+      <div class="list" v-for="todo of todos" :key="todo.id">
+        <HelloWorld  :event="todo" />
+      </div>
   </div>
+  
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import axios from 'axios';
+import HelloWorld from "@/components/HelloWorld.vue"
+const baseURL = "http://localhost:3000/listFilms"
 
 export default {
-  name: 'Home',
+  name: 'app',
   components: {
-    HelloWorld
+        HelloWorld
+      },
+  data() {
+    return {
+      todos: [],
+      todoName: '',
+      
+    }
+  },
+  async created() {
+    try {
+      const res = await axios.get(baseURL)
+      this.todos = res.data;
+    } catch(e) {
+      console.error(e)
+    }
+  },
+  methods: {
+    async addTodo() {
+      const res = await axios.post(baseURL, { title: this.todoName })
+      this.todos = [...this.todos, res.data]
+      this.todoName = ''
+    },
   }
+  
 }
 </script>
+<style>
+.new {
+  padding: 0;
+  border: none;
+}
+.list {
+  display: flex;
+}
+.save {
+  border: 0 1 1;
+}
+#app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+</style>
