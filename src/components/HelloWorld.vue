@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import axios from 'axios';
-const baseURL = "http://localhost:3000/listFilms"
+import { auth } from '@/apis/auth'
+
 
 export default {
   name: 'HelloWorld',
@@ -22,32 +22,28 @@ export default {
       },
     }
   },
-  async created() {
-    try {
-      const res = await axios.get(baseURL)
-      this.todos = res.data;
-    } catch(e) {
-      console.error(e)
-    }
-  },
   methods: {
     addbutton() {
       let div = this.$el.querySelector("#save")
       div.style.display = "block"
     },
     removebutton(){
-      this.$el.querySelector("#save").style.display = "none"
+      let input = this.$el.querySelector("#save")
+      setTimeout(function(){input.style.display = "none"},100);
+      
+
     },
     async deleteEvent() {
-      await axios.delete(baseURL+"/"+ this.event.id);
-      const res = await axios.get(baseURL)
-      this.todos = res.data;
+      await auth.delete(this.event.id)
+      // const res = await axios.get(baseURL)
+      // this.todos = res.data;
+      window.location.href = "/"
   },
   async editEvent() {
-      this.removebutton()
-      const res = await axios.patch(baseURL+"/"+ this.event.id, this.list)
-      await axios.get(baseURL)
-      this.todos = res.data;
+      this.removebutton() 
+      const res = await auth.edit(this.event.id, this.list)
+      // await axios.get(baseURL)
+      // this.todos = res.data;
   },
   
     

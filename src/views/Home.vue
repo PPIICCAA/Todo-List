@@ -13,9 +13,8 @@
 </template>
 
 <script>
-import axios from 'axios';
 import HelloWorld from "@/components/HelloWorld.vue"
-const baseURL = "http://localhost:3000/listFilms"
+import { auth } from '@/apis/auth'
 
 export default {
   name: 'app',
@@ -30,16 +29,12 @@ export default {
     }
   },
   async created() {
-    try {
-      const res = await axios.get(baseURL)
+      const res = await auth.getAll()
       this.todos = res.data;
-    } catch(e) {
-      console.error(e)
-    }
   },
   methods: {
     async addTodo() {
-      const res = await axios.post(baseURL, { title: this.todoName })
+      const res = await auth.create(this.todoName)
       this.todos = [...this.todos, res.data]
       this.todoName = ''
     },
