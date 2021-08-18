@@ -6,7 +6,7 @@
       <button @click="addTodo()">Print</button>
     </div>
       <div class="list" v-for="todo of todos" :key="todo.id">
-        <HelloWorld  :event="todo" />
+        <HelloWorld  :event="todo" @remove="handleRemove" />
       </div>
   </div>
   
@@ -28,16 +28,30 @@ export default {
       
     }
   },
-  async created() {
-      const res = await auth.getAll()
-      this.todos = res.data;
+  mounted() {
+    this.getTodos()
   },
   methods: {
+    async getTodos(){
+      const res = await auth.getAll()
+      this.todos = res.data;
+    },
     async addTodo() {
       const res = await auth.create(this.todoName)
       this.todos = [...this.todos, res.data]
       this.todoName = ''
     },
+    handleRemove(id){
+        this.removeTodo(id)
+        this.getTodos()
+    },
+    async removeTodo(id) {
+      try {
+          await auth.delete(id)
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
   
 }

@@ -1,9 +1,10 @@
 <template>
   <div class="list">
-        <div @click="addbutton()">
+        <div v-if="!editMode"  @click="setEditMode">{{ list.title }}</div>
+        <div v-else>
           <input @blur="removebutton()" @keyup.enter="editEvent()" class="new" v-model="list.title" >
         </div>
-        <button id="save" @click="editEvent()">Save</button>
+        <button id="#save" v-if="editMode" @click="editEvent()">Save</button>
         <button @click="deleteEvent()">Delete</button>
       </div>
 </template>
@@ -14,36 +15,42 @@ import { auth } from '@/apis/auth'
 
 export default {
   name: 'HelloWorld',
-  props: ["event"],
+  props: {
+    event: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       list: {
-        title: this.event.title
+        title: null
       },
+      editMode: false
     }
   },
+
+  created(){
+     this.list.title = this.event.title
+  },
+
   methods: {
+    setEditMode(){
+      this.editMode = true
+    },
     addbutton() {
       let div = this.$el.querySelector("#save")
       div.style.display = "block"
     },
     removebutton(){
-      let input = this.$el.querySelector("#save")
-      setTimeout(function(){input.style.display = "none"},100);
-      
-
+      this.editMode = false
     },
-    async deleteEvent() {
-      await auth.delete(this.event.id)
-      // const res = await axios.get(baseURL)
-      // this.todos = res.data;
-      window.location.href = "/"
+    async deleteEvent() {    
+      this.$emit('remove', this.event.id )
   },
   async editEvent() {
       this.removebutton() 
-      const res = await auth.edit(this.event.id, this.list)
-      // await axios.get(baseURL)
-      // this.todos = res.data;
+      await auth.edit(this.event.id, this.list)
   },
   
     
