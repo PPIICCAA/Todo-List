@@ -2,7 +2,7 @@
   <div class="list">
         <div v-if="!editMode"  @click="setEditMode">{{ list.title }}</div>
         <div v-else>
-          <input @blur="removebutton()" @keyup.enter="editEvent()" class="new" v-model="list.title" >
+          <input @blur="editEvent()" @keyup.enter="editEvent()" class="new" v-model="list.title" >
         </div>
         <button id="#save" v-if="editMode" @click="editEvent()">Save</button>
         <button @click="deleteEvent()">Delete</button>
@@ -45,7 +45,7 @@ export default {
     removebutton(){
       this.editMode = false
     },
-    async deleteEvent() {    
+    deleteEvent() {    
       this.$emit('remove', this.event.id )
   },
   async editEvent() {

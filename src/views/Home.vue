@@ -41,9 +41,9 @@ export default {
       this.todos = [...this.todos, res.data]
       this.todoName = ''
     },
-    handleRemove(id){
-        this.removeTodo(id)
-        this.getTodos()
+    async handleRemove(id){
+        await this.removeTodo(id)
+        await this.getTodos()
     },
     async removeTodo(id) {
       try {
