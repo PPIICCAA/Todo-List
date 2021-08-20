@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const ENDPOINT_PATH = "http://localhost:3000/listFilms";
+// const ENDPOINT_PATH = "http://localhost:3001/api/notes";
+const ENDPOINT_PATH =  "https://mysterious-wave-04607.herokuapp.com/api/notes";
 
 export const auth = {
     create(title) {
