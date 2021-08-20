@@ -2,6 +2,7 @@
   "name": "api-peliculas-rutas",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://github.com/PPIICCAA/Todo-List",
   "scripts": {
     "start": "node index.js",
     "serve": "vue-cli-service serve",
